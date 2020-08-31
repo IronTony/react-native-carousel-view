@@ -1,10 +1,8 @@
 /**
  * @flow
  */
-import React, {Component} from 'react';
-import {
-  ViewPagerAndroid,
-} from 'react-native';
+import React, { Component } from "react";
+import ViewPagerAndroid from "@react-native-community/viewpager";
 
 type Props = {
   width: number,
@@ -14,15 +12,15 @@ type Props = {
   onScroll: () => void,
   contentContainerStyle: any,
   children: any,
-}
+};
 
 export default class CarouselPager extends Component {
-  viewPager: ViewPagerAndroid
-  props: Props
+  viewPager: ViewPagerAndroid;
+  props: Props;
 
   state: {
-    pageState: string
-  }
+    pageState: string,
+  };
 
   constructor(props: Props) {
     super(props);
@@ -32,12 +30,12 @@ export default class CarouselPager extends Component {
     (this: any)._pageScroll = this._pageScroll.bind(this);
 
     this.state = {
-      pageState: 'idle',
+      pageState: "idle",
     };
   }
 
   scrollToPage(page: number, animated?: boolean) {
-    if (typeof animated === 'undefined') {
+    if (typeof animated === "undefined") {
       animated = true;
     }
     if (animated) {
@@ -48,35 +46,35 @@ export default class CarouselPager extends Component {
   }
 
   _pageScroll() {
-    const {onScroll} = this.props;
+    const { onScroll } = this.props;
     onScroll();
   }
 
   _selectedPage(e) {
-    const {onEnd} = this.props;
+    const { onEnd } = this.props;
     const activePage = e.nativeEvent.position;
-    this.setState({activePage});
+    this.setState({ activePage });
 
     onEnd(activePage);
   }
 
   _pageStateChange(pageState) {
-    const {onBegin} = this.props;
-    if (pageState === 'dragging') {
+    const { onBegin } = this.props;
+    if (pageState === "dragging") {
       // if page state is dragging, call on begin
-      return this.setState({pageState}, onBegin());
+      return this.setState({ pageState }, onBegin());
     }
-    return this.setState({pageState});
+    return this.setState({ pageState });
   }
 
   render() {
-    const {children, contentContainerStyle, width, height} = this.props;
+    const { children, contentContainerStyle, width, height } = this.props;
     return (
       <ViewPagerAndroid
         ref={(viewPager) => {
           this.viewPager = viewPager;
         }}
-        style={[contentContainerStyle, {width, height}]}
+        style={[contentContainerStyle, { width, height }]}
         onPageScroll={this._pageScroll}
         onPageScrollStateChanged={this._pageStateChange}
         onPageSelected={this._selectedPage}
